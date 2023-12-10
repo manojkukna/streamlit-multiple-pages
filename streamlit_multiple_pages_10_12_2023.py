@@ -33,15 +33,15 @@ def run():
                                     Options=Options, Charges=Charges,Charges_credits_debits=Charges_credits_debits), symbol=None)
             z.dataframe(dataframe_df= df, default=z.dataframe_columns(list= df), symbol=None)
         if app == 'your uploaded_file':
-            st.image("image\\zhrodh.png",
+            st.image("zhrodh.png",
                      caption="Developed and Maintaned by: KUKAN MANOJ                          :      MO ->8000594016")
-            st.image("image\\tax_pnl1.png",
+            st.image("tax_pnl1.png",
                      caption="Developed and Maintaned by: KUKAN MANOJ                          :      MO ->8000594016")
-            st.image("image\\reports.png",
+            st.image("reports.png",
                      caption="Developed and Maintaned by: KUKAN MANOJ                          :      MO ->8000594016")
-            st.image("image\\download.png",
+            st.image("download.png",
                      caption="Developed and Maintaned by: KUKAN MANOJ                          :      MO ->8000594016")
-            st.image("image\\uploaded.png",
+            st.image("uploaded.png",
                      caption="Developed and Maintaned by: KUKAN MANOJ                          :      MO ->8000594016")
 
             z.uploaded_file()
