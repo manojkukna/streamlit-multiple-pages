@@ -416,7 +416,7 @@ def uploaded_file():
            return all_qttar_dict
     return all_qttar_dict
 uploaded_file()
-addresh= "taxpnl-JD0585\\taxpnl-JD0585-2023_2024-Q1-Q3.xlsx"
+addresh= "taxpnl-JD0585-2023_2024-Q1-Q3.xlsx"
 
 df = pd.DataFrame(all_qttar_dict["Holding"])
 if not len(df):
