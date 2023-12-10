@@ -37,6 +37,6 @@ python varjan 3.8   up
 Generate the requirements.txt File
 pip freeze > requirements.txt
 
+upload streamlit program website
 
-utl web web sid
-https://zerodhajanral.streamlit.app/
+https://streamlit.io/cloud
