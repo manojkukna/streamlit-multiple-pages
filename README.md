@@ -29,7 +29,21 @@ https://youtu.be/PSji21jUNO0?si=cKfht-Qs8uSZOSiD
     app = option_menu(
                 menu_title='Pondering ',
                  icons=['house-fill','person-bounding-box','journal-arrow-up' , 'trophy-fill', 'apple', 'play-btn-fill','caret-right-square-fill','info-circle-fill'],
+   streamlit_multiple_home_14_12_2023.py  file
 
+    st.set_page_config(page_title="KUKAN MANOJ",page_icon="📊",layout="wide",initial_sidebar_state="expanded",)  # "auto" or "expanded" or "collapsed"
+# Set dark theme using custom CSS
+st.markdown(
+    """
+    <style>
+        body {
+            color: #FFFFFF;  /* Text color */
+            background-color: 'black';  /* Background color */
+        }
+        /* Add more custom styles as needed */
+    </style>
+    """,
+    unsafe_allow_html=True)
 
 
 
