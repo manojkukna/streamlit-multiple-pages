@@ -1,0 +1,945 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © ceyhun
+
+//@version=5                                                 
+
+strategy(title='Z LOW MIRAMIDIG 100%  24+12+2023' , overlay=true,pyramiding = 1000, commission_type=strategy.commission.percent, commission_value=0.30, initial_capital=200000, default_qty_type=strategy.percent_of_equity, default_qty_value=100)
+
+
+
+
+// ============== SwastikAlgo Syntax   https://www.tradingmachine.in/ClientReg                 { =======================================
+// ============== SwastikAlgo Syntax   name = manoj              { =======================================
+// ============== SwastikAlgo Syntax   Apikey_ZERODHA = "LBIBGDJJVBNWRSL44BJ5T2O6H3L43P5P"            { =======================================
+// ============== SwastikAlgo Syntax   Apikey = IP8LS9IO4PAI8VF           { =======================================
+
+ 
+output_syntax          = input("\n\n\n{{strategy.order.alert_message}}\n\n\n",      title=   "OutPut_Alert_Syntax")
+
+
+
+
+group_Risk_Reward_Ratio  = "!!!!!!!!!!!!!!!!!!!:- Risk_Reward Ratio -:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+ENTRT = input.float(defval=200.00, title='ENTRT', minval=0.00,group =group_Risk_Reward_Ratio )
+Stoploss_inut = input.float(defval=20.00, title='%Stoploss%', minval=0.00,group =group_Risk_Reward_Ratio)
+Account_Size = input.int(defval=200000, title='Account Size', minval=0,group =group_Risk_Reward_Ratio)
+Risk_Par_Trade = input.float(defval=2.00, title='Risk Par Trade%', minval=0.00,group =group_Risk_Reward_Ratio)
+Risk_Reward = input.int(defval=3, title='Risk/Reward%', minval=0,group =group_Risk_Reward_Ratio)
+
+
+// "!!!!!!!!!!!!!!!!!!!:- Risk_Reward Ratio _caculet-:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+Stoploss_caculet_point_parsent =   Stoploss_inut
+Stoploss_caculet_point = ( ENTRT / 100.00 * Stoploss_caculet_point_parsent)
+Stoploss_caculet = ENTRT - Stoploss_caculet_point
+Risk_Value = Account_Size /100 * Risk_Par_Trade
+Lose =  Account_Size /100 * Risk_Par_Trade
+No_of_Share = Lose / Stoploss_caculet_point
+
+
+
+
+
+
+
+Stoploss = Stoploss_caculet
+Quantity_    =  int(No_of_Share)
+
+
+
+SC = close
+//Backtest inputs
+
+group_Backtest_Time  = "!!!!!!!!!!!!!!!!!!!:- Backtest Time -:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+FromMonth = input.int(defval=10, title='From Month', minval=1, maxval=12,group=group_Backtest_Time )
+FromDay = input.int(defval=1, title='From Day', minval=1, maxval=31,group =group_Backtest_Time)
+FromYear = input.int(defval=2023, title='From Year', minval=2007,group=group_Backtest_Time)
+startDate = timestamp(FromYear, FromMonth, FromDay, 00, 00)  // backtest start window
+endDate = timestamp(2050, 1, 1, 15, 59)  // backtest finish window
+
+
+
+
+
+
+
+
+l = label.new(startDate, high, "startDate", xloc=xloc.bar_time,color =color.rgb(241, 219, 13) )
+label.delete(l[1])
+
+
+
+window() =>  // create function "within window of time"
+    time >= startDate and time < endDate ? true : false
+
+//  'invesemen:' + str.tostring((invesemen) , "#.#") +
+
+// group_invesemen_Management = "!!!!!!!!!!!!!!!!!!!-: invesemen Management -:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+// invesemen_parsent_5        = input.float(5000.00, title="invesemen_parsent_5% ",group = group_invesemen_Management)
+// invesemen_parsent_10       = input.float(3000.00, title="invesemen_parsent_10%  + ",group = group_invesemen_Management)
+// invesemen_parsent_15       = input.float(10000.00, title="invesemen_parsent_15%",group = group_invesemen_Management)
+// invesemen_parsent_20       = input.float(25000.00, title="invesemen_parsent_20%",group = group_invesemen_Management)
+// invesemen_parsent_25       = input.float(23000.00, title="invesemen_parsent_25%",group = group_invesemen_Management)
+// invesemen_parsent_30       = input.float(21000.00, title="invesemen_parsent_30%",group = group_invesemen_Management)
+// invesemen_parsent_35       = input.float(19000.00, title="invesemen_parsent_35%",group = group_invesemen_Management)
+// invesemen_parsent_40       = input.float(17000.00, title="invesemen_parsent_40%",group = group_invesemen_Management)
+// invesemen_parsent_45       = input.float(15000.00, title="invesemen_parsent_45%",group = group_invesemen_Management)
+// invesemen_parsent_50       = input.float(13000.00, title="invesemen_parsent_50%",group = group_invesemen_Management)
+// invesemen_parsent_55       = input.float(11000.00, title="invesemen_parsent_55%",group = group_invesemen_Management)
+// invesemen_parsent_60       = input.float(9000.00, title="invesemen_parsent_60%",group = group_invesemen_Management)
+// invesemen_parsent_65       = input.float(8000.00, title="invesemen_parsent_65%",group = group_invesemen_Management)
+// invesemen_parsent_70       = input.float(7000.00, title="invesemen_parsent_70%",group = group_invesemen_Management)
+// invesemen_parsent_75       = input.float(6000.00, title="invesemen_parsent_75%",group = group_invesemen_Management)
+// invesemen_parsent_80       = input.float(5000.00, title="invesemen_parsent_80%",group = group_invesemen_Management)
+// invesemen_parsent_85       = input.float(6000.00, title="invesemen_parsent_85%",group = group_invesemen_Management)
+// invesemen_parsent_90       = input.float(5000.00, title="invesemen_parsent_90%",group = group_invesemen_Management)
+// invesemen_parsent_95       = input.float(4000.00, title="invesemen_parsent_95%",group = group_invesemen_Management)
+// invesemen_parsent_100       = input.float(3000.00, title="invesemen_parsent_100%",group = group_invesemen_Management)
+
+
+
+
+
+
+
+
+
+
+group_Order_Management  = "!!!!!!!!!!!!!!!!!!!-: Order Management -:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+HIGH_HIGH_parsent       = input.float(1.00, title="HIGH_HIGH parsen/%",group =group_Order_Management)*( close*0.01) 
+Stoploss_avrej  = input.float(defval=4000.00, title='Stoploss Avrej',group =group_Order_Management)
+
+// Profit_target   =  input.float(defval=500000, title='Profit_target', minval=0.00,group=group_Order_Management)
+// Profit_target_parsent_true  = input.bool( defval=false,       title='=============Profit_target_parsent_true=========',group =group_Order_Management)
+
+// target__RENJ = input.float(defval=25.00, title='Target__RENJ %', minval=1.00,group=group_Order_Management)
+
+// Profit_target_parsent   =  input.float(defval=50.00, title='Profit_parsent%', minval=1.00,group=group_Order_Management)
+// Quantity_add_true  = input.bool( defval=false,       title='============= Quantity_add_true=========',group =group_Order_Management)
+
+// //  Quantity_add_low_true  = input.bool( defval=true,       title='============= Quantity_add_low_true=========',group =group_Order_Management)
+// Quantity_avre   =  input.float(defval=10.00, title='Quantity_%', minval=1.00,group=group_Order_Management)
+
+// Quantity_add_piramidig_true  = input.bool(defval=true,       title='============= Quantity_add_piramidig_true=========',group =group_Order_Management)
+// Quantity_add_piramidig   =  input.float(defval=5.00,         title='Quantity_add_piramidig_%', minval=1.00,group=group_Order_Management)
+
+
+Algo_DEBUG_Order_Management  = "!!!!!!!!!!!!!!!!!!!-: Algo_DEBUG -:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+Algo_DEBUG  = input.bool( defval=false,       title='============= Debug=========',group =Algo_DEBUG_Order_Management  )
+
+// ======================== Cilent-details-Syntax { =======================================
+group_Cilent_Details  = "!!!!!!!!!!!!!!!!!!!-:Cilent-Detail-:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+// order_cunt = input.int(defval=1, title='order_cunt', minval=1,group=group_Cilent_Details )
+broker =input.string("ZERODHA",title='BROKER',options=["ZERODHA","DHAN"],group=group_Cilent_Details)
+user_id =input.string("LG5706",options=["JD0585","LG5706","XYC141"],group=group_Cilent_Details)
+DELIVERY_INTRADAY     = input.string(defval='DELIVERY', title='DELIVERY/INTRADAY ', options=['INTRADAY','DELIVERY'],group=group_Cilent_Details)      /// 'CE'== bue   'FUT'==sell
+Apikey_ZERODHA  =input("IP8LS9IO4PAI8VF",title='ZERODHA',group=group_Cilent_Details)
+Apikey_DHAN  =input("HcZ4g",title='DHAN',group=group_Cilent_Details)
+
+
+
+// toggleBreaks = input(false, title='Show Breaks')
+// leftBars = input(15, title='Left Bars ')
+// rightBars = input(15, title='Right Bars')
+// volumeThresh = input(20, title='Volume Threshold')
+
+
+
+// Target_Order_Management  = "!!!!!!!!!!!!!!!!!!!-:Target-:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+// T1_Targe_DEBUG  = input.bool( defval=false,       title='============= Target=========',group =Target_Order_Management)
+// T1_Targe  = input.int(defval=2, title='Target T1 %', minval=2,group=Target_Order_Management ) * ( strategy.position_size*0.01) 
+// T2_Targe  = input.int(defval=2, title='Target T2 %', minval=2,group=Target_Order_Management ) * ( strategy.position_size*0.01) 
+// T3_Targe  = input.int(defval=2, title='Target T3 %', minval=2,group=Target_Order_Management ) * ( strategy.position_size*0.01) 
+// T4_Targe  = input.int(defval=2, title='Target T4 %', minval=2,group=Target_Order_Management ) * ( strategy.position_size*0.01) 
+// T5_Targe  = input.int(defval=2, title='Target T5 %', minval=2,group=Target_Order_Management ) * ( strategy.position_size*0.01) 
+
+
+
+
+
+NSE = "NSE"
+Symbol = syminfo.ticker
+
+
+
+
+
+
+Buy_Entry_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+  Symbol +',BUY,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(Quantity_)+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+Buy_Close_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(strategy.position_size))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+
+
+
+
+var B = false
+// var s = false
+
+  
+Buy  = ta.crossover(close, ENTRT)  
+Sell = ta.crossunder(close,Stoploss) 
+
+//or ta.crossunder(Trail1,strategy.position_avg_price)
+
+
+
+var target_plot = false
+
+// if  Buy
+//     target_plot := true
+//     B:= true
+// if  Sell
+//     target_plot := false
+//     B:= false
+
+
+
+
+// T1_caculet_point_parsent =  Stoploss_caculet_point_parsent * 1
+// T1_caculet_point =   ( ENTRT / 100.00 * T1_caculet_point_parsent)
+// T1 =  ENTRT + T1_caculet_point
+
+// plot( window() ? T1 : na , title="T1", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_line,display=display.none)
+
+
+// T2_caculet_point_parsent =  Stoploss_caculet_point_parsent * 2
+// T2_caculet_point =   ( ENTRT / 100.00 * T2_caculet_point_parsent)
+// T2 =  ENTRT + T2_caculet_point
+// plot( window()? T2 : na , title="T2", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_line,display=display.none)
+
+
+// T3_caculet_point_parsent =  Stoploss_caculet_point_parsent * 3
+// T3_caculet_point =   ( ENTRT / 100.00 * T3_caculet_point_parsent)
+// T3 =  ENTRT + T3_caculet_point
+// plot(window() ? T3 : na , title="T3", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_line,display=display.none)
+
+
+// T4_caculet_point_parsent =  Stoploss_caculet_point_parsent * 4
+// T4_caculet_point =   ( ENTRT / 100.00 * T4_caculet_point_parsent)
+// T4 =  ENTRT + T4_caculet_point
+// plot( window() ? T4 : na , title="T4", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+// T5_caculet_point_parsent =  Stoploss_caculet_point_parsent * 5
+// T5_caculet_point =   ( ENTRT / 100.00 * T5_caculet_point_parsent)
+// T5 =  ENTRT + T5_caculet_point
+// plot( window() ? T5 : na , title="T5", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+// T6_caculet_point_parsent =  Stoploss_caculet_point_parsent * 6
+// T6_caculet_point =   ( ENTRT / 100.00 * T6_caculet_point_parsent)
+// T6 =  ENTRT + T6_caculet_point
+// plot(target_plot and window() ? T6 : na , title="T6", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+
+// T7_caculet_point_parsent =  Stoploss_caculet_point_parsent * 7
+// T7_caculet_point =   ( ENTRT / 100.00 * T7_caculet_point_parsent)
+// T7=  ENTRT + T7_caculet_point
+// plot(target_plot and window() ? T7 : na , title="T7", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+
+// T8_caculet_point_parsent =  Stoploss_caculet_point_parsent * 8
+// T8_caculet_point =   ( ENTRT / 100.00 * T8_caculet_point_parsent)
+// T8 =  ENTRT + T8_caculet_point
+// plot(target_plot and window() ? T8 : na , title="T8", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+
+// T9_caculet_point_parsent =  Stoploss_caculet_point_parsent * 9
+// T9_caculet_point =   ( ENTRT / 100.00 * T9_caculet_point_parsent)
+// T9 =  ENTRT + T9_caculet_point
+// plot(target_plot and window() ? T9 : na , title="T9", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+
+// T10_caculet_point_parsent =  Stoploss_caculet_point_parsent * 10
+// T10_caculet_point =   ( ENTRT / 100.00 * T10_caculet_point_parsent)
+// T10 =  ENTRT + T10_caculet_point
+// plot(target_plot and window() ? T10 : na , title="T10", color=color.rgb(16, 246, 13), linewidth=1,style =plot.style_linebr,display=display.none)
+
+
+
+
+// T1_Targe_Sell = ta.crossover(close, T1) 
+// T2_Targe_Sell = ta.crossover(close, T2) 
+// T3_Targe_Sell = ta.crossover(close, T3) 
+// T4_Targe_Sell = ta.crossover(close, T4) 
+// T5_Targe_Sell = ta.crossover(close, T5) 
+
+
+
+
+// // *** Tables {
+// Table_Position  = input.string(position.top_center, "Table_Position",  options=[position.top_left,position.top_center,position.top_right,position.middle_left,position.middle_center,position.middle_right,position.bottom_left,position.bottom_center,position.bottom_right])
+// Table_Text_Size = input.string(size.normal,          "Table_Text_Size", options=[size.auto,size.tiny,size.small,size.normal,size.large,size.huge])
+// text_halign = input.string(text.align_center,         "text_halign", options=[text.align_center,text.align_right,text.align_left])
+
+Table_Position  = position.top_center 
+Table_Text_Size = size.normal
+text_halign = text.align_center
+
+
+
+// var t = table.new(Table_Position, 15, 50, color.rgb(115, 162, 220) )
+Text_Color      = #f3f1eb
+Head_Color      = color.rgb(10, 10, 10)
+Body_Color      = color.rgb(70, 9, 99)
+Highlight_Color = color.rgb(65, 91, 207)
+
+
+
+capital =(strategy.position_avg_price * strategy.position_size)
+
+pnl =  ((close - strategy.position_avg_price ) * strategy.position_size)
+parsent = pnl / capital * 100
+all_QTT = strategy.position_size
+Stoploss_avrej_p = strategy.position_avg_price - Stoploss_avrej / (math.abs(strategy.position_size) )
+
+
+
+
+if Stoploss_avrej_p < 0
+    Stoploss_avrej_p := Stoploss
+
+
+
+
+
+// This work is licensed under a Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) https://creativecommons.org/licenses/by-nc-sa/4.0/
+// © LuxAlgo
+
+
+//
+// highUsePivot = fixnan(ta.pivothigh(leftBars, rightBars)[1])
+// lowUsePivot = fixnan(ta.pivotlow(leftBars, rightBars)[1])
+// r1 = plot(highUsePivot, color=ta.change(highUsePivot) ? na : #139213, linewidth=1,style=plot.style_circles, offset=-(rightBars + 1), title='Resistance',display=display.none)
+// s1 = plot(lowUsePivot, color=ta.change(lowUsePivot) ? na : #ec1d40, linewidth=1,style=plot.style_cross, offset=-(rightBars + 1), title='Support',display=display.none)
+
+//Volume %
+short = ta.ema(volume, 5)
+long = ta.ema(volume, 10)
+osc = 100 * (short - long) / long
+
+
+//For breaks with volume
+// plotshape(toggleBreaks and ta.crossunder(close, lowUsePivot) and not(open - close < high - open) and osc > volumeThresh, title='Break', text='sell', style=shape.labeldown, location=location.abovebar, color=color.new(color.red, 0), textcolor=color.new(color.white, 0), size=size.tiny,display=display.none)
+// plotshape(toggleBreaks and ta.crossover(close, highUsePivot) and not(open - low > close - open) and osc > volumeThresh, title='Break', text='buy', style=shape.labelup, location=location.belowbar, color=color.new(color.green, 0), textcolor=color.new(color.white, 0), size=size.tiny,display=display.none)
+
+//For bull / bear wicks
+// plotshape(toggleBreaks and ta.crossover(close, highUsePivot) and open - low > close - open, title='Break', text='Bull Wick', style=shape.labelup, location=location.belowbar, color=color.new(color.green, 0), textcolor=color.new(color.white, 0), size=size.tiny)
+// plotshape(toggleBreaks and ta.crossunder(close, lowUsePivot) and open - close < high - open, title='Break', text='Bear Wick', style=shape.labeldown, location=location.abovebar, color=color.new(color.red, 0), textcolor=color.new(color.white, 0), size=size.tiny)
+
+
+// alertcondition(ta.crossunder(close, lowUsePivot) and osc > volumeThresh, title='Support Broken', message='Support Broken')
+// alertcondition(ta.crossover(close, highUsePivot) and osc > volumeThresh, title='Resistance Broken', message='Resistance Broken')
+
+
+// **************** MyFunctions { ************
+MyLabel( price, 
+             Text      = '', 
+             color     = color.blue, 
+             yloc      = yloc.price, 
+             xloc      = xloc.bar_index, 
+             bar_index = bar_index, 
+             style     = label.style_circle, 
+             tooltip   = '', 
+             size      = size.tiny, 
+             textcolor =color.white,
+             textalign = text.align_left,
+             delete    = false
+             )=>
+    label Label = label.new(bar_index, price, yloc=yloc, xloc=xloc, text=Text, style=style, textcolor=textcolor, color=color, tooltip=tooltip, size=size, textalign=textalign)
+    if delete
+        label.delete(Label[1])
+    Label
+
+
+
+
+
+
+
+
+
+var   order_cunt_df = 0 
+
+var  HIGH_false = false
+var  HIGH = ENTRT
+
+
+
+
+// var  buy_plot = 0.00
+// var  buy_vaej  = false
+var Targe_cunt = 0
+wentLong  = strategy.position_size == 0 
+Stoploss_avrej_Sell = ta.crossunder(close,Stoploss_avrej_p) 
+
+
+var df_sell_false = false
+chang = float( close - strategy.position_avg_price) * strategy.position_size
+chang_patse = float( close- strategy.position_avg_price) / ENTRT * 100
+
+var Entry_fast =  float( 0.00)
+var all_chan =  float( 0.00)
+var all_prsen =  float( 0.00)
+
+
+// if Stoploss_avrej_Sell    and window()    and   df_sell_false 
+   
+//     HIGH_false  := false
+//     df_sell_false := false
+  
+
+//     all_chan := chang + all_chan
+//     all_prsen := chang_patse + all_prsen
+
+//     Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+//                          '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+//                          '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+//     Label_baken         ='Stoploss_avrej:' +
+//                          '\ncapital: ' +  str.tostring(capital,   "#.##") +
+//                          '\nExit: '    +  str.tostring(close,   "#.##") + 
+//                          '\nEnt: '    + str.tostring(ENTRT, "#.##") +
+//                          '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+//                          '\nPnL : '   + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+//                          '\n %: '     + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+//                          '\nall: '    + str.tostring(all_chan, "#.##")+
+//                           '\nall%: '  + str.tostring(all_prsen, "#.##") + "%" +
+//                          '\nHIGH_profit' + 
+//                          '\nHIGH: ' + str.tostring(HIGH, "#.##")  +
+//                          '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+ 
+
+
+
+//     MyLabel(high- (high/40) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2),tooltip = Label_baken)
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Stoploss_avrej", alert_message=Buy_Close_msg)
+
+
+
+
+ 
+
+
+
+
+
+
+// if toggleBreaks and ta.crossunder(close, lowUsePivot) and not(open - close < high - open) and osc > volumeThresh  and window()  and  df_sell_false
+    
+    // HIGH_false  := false
+
+    // df_sell_false := false
+    
+    
+    // all_chan := chang + all_chan
+    // all_prsen := chang_patse + all_prsen
+
+    // Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+    //                      '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+    //                      '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+    // Label_baken         ='Stoploss_Support:' +
+    //                       '\ncapital: ' +  str.tostring(capital,   "#.##") +
+    //                      '\nExit: ' +  str.tostring(close,   "#.##") + 
+    //                      '\nEnt: ' + str.tostring(ENTRT, "#.##") +
+    //                      '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+    //                      '\nPnL : ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+    //                      '\n %: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+    //                      '\nall: ' + str.tostring(all_chan, "#.##")+
+    //                      '\nall%: ' + str.tostring(all_prsen, "#.##") + "%" +
+    //                       '\nHIGH_profit '+ 
+    //                      '\nHIGH: ' + str.tostring(HIGH, "#.##") + 
+    //                      '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+
+    // MyLabel(high- (high/40) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2), tooltip = Label_baken)
+    // strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Stoploss_Support", alert_message=Buy_Close_msg)
+
+
+
+
+
+
+// if Sell and window()  and  df_sell_false
+
+//     HIGH_false  := false
+//     df_sell_false := false
+  
+
+//     all_chan := chang + all_chan
+//     all_prsen := chang_patse + all_prsen
+
+//     Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+//                          '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+//                          '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+//     Label_baken         ='Buy_CLOSE:' +
+//                           '\ncapital: ' +  str.tostring(capital,   "#.##") +
+//                           '\nExit: ' +  str.tostring(close,   "#.##") + 
+//                          '\nEnt: ' + str.tostring(ENTRT, "#.##") +
+//                          '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+//                          '\nPnL : ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+//                          '\n %: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+//                          '\nall: ' + str.tostring(all_chan, "#.##")+
+//                          '\nall%: ' + str.tostring(all_prsen, "#.##") + "%" +
+//                          '\nallHIGH_profit '+ 
+//                          '\nHIGH: ' + str.tostring(HIGH, "#.##") + 
+//                          '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+
+
+//     MyLabel(high- (high/40) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2), tooltip = Label_baken)
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Buy_CLOSE" , alert_message=Buy_Close_msg)
+
+var Entry_QTT = 0.00
+
+if Buy   and window()   and wentLong   and    not df_sell_false
+    // strategy.entry("Buy",  strategy.long, qty= Quantity_, comment=Algo_DEBUG?Buy_Entry_msg:"BUY_Entry", alert_message=Buy_Entry_msg)
+    order_cunt_df := order_cunt_df + 1
+    Targe_cunt := 0
+    df_sell_false := true
+    Entry_fast := close
+    Entry_QTT := No_of_Share
+
+// Entry_QTT := (math.abs(strategy.position_size))
+var  low_pot =  ENTRT
+var  qtt_add_No_of_Share = 1
+
+// var  low_true =  true 
+
+if Buy and  (close > ENTRT) and window()  and wentLong
+    
+    HIGH := close
+    low_pot := close
+
+    
+ 
+if  close <  ( low_pot - HIGH_HIGH_parsent) and  (close < ENTRT)   and window()    and   df_sell_false 
+    low_pot := close
+    stock_parsent = (close - Entry_fast)  / Entry_fast   * 100
+
+
+    qtt_add_No_of_Share :=  int (qtt_add_No_of_Share  + 5)
+    
+    display_         = 'inve:' + str.tostring((qtt_add_No_of_Share * close) , "#.#") +
+                         '\n qtt all: ' + str.tostring( math.abs(strategy.position_size) , "#.#") +
+                         '\npnl: ' + str.tostring( (close - strategy.position_avg_price) * math.abs(strategy.position_size)  , "#.#") +
+                         '\n%: ' + str.tostring((close - strategy.position_avg_price) , "#.#") + "%"
+        
+    add_Entry_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+  Symbol +',BUY,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(qtt_add_No_of_Share)+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+    strategy.entry("Buy",  strategy.long, qty=qtt_add_No_of_Share, comment=Algo_DEBUG ? add_Entry_msg: str.tostring(display_), alert_message=add_Entry_msg)
+    Entry_QTT := int( qtt_add_No_of_Share)
+    // qtt_add_No_of_Share := qtt_add_No_of_Share 
+
+
+// if  close < low_pot 
+//     low_pot := close 
+
+
+
+if  close >  (HIGH + HIGH_HIGH_parsent) and  (close > ENTRT)   and window()    and   df_sell_false 
+    HIGH := close
+    
+    // qtt_add_No_of_profit =(HIGH - strategy.position_avg_price ) * (math.abs(strategy.position_size) )
+    // qtt_add_No_of_Share = ( HIGH - strategy.position_avg_price ) * math.abs(strategy.position_size)  >  HIGH ? (HIGH - strategy.position_avg_price)  * math.abs(strategy.position_size) / HIGH : 0
+    
+
+    // qtt_add_No_of_Share_TTT = (HIGH - strategy.position_avg_price) *  (math.abs(strategy.position_size))
+
+    
+    // if qtt_add_No_of_Share >= 1 and   Quantity_add_true and  df_sell_false
+    //     qtt_add_No_of_Share :=  ( qtt_add_No_of_Share / 100.00 * Quantity_avre)
+    //     add_Entry_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+  Symbol +',BUY,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(qtt_add_No_of_Share)+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+    //     strategy.entry("Buy",  strategy.long, qty=qtt_add_No_of_Share, comment=Algo_DEBUG ? add_Entry_msg:"pnl:" + str.tostring(qtt_add_No_of_Share_TTT,"#") +"\n   qtt:"+ str.tostring(math.abs(strategy.position_size)), alert_message=add_Entry_msg)
+
+    // stock_parsent = (close - Entry_fast)  / Entry_fast   * 100
+
+
+
+
+    // if Quantity_add_piramidig_true //and  df_sell_false 
+    //     var  invesemen = 0
+
+    //     if  stock_parsent > 0
+    //         invesemen := int (invesemen_parsent_5 / 5)
+    //     if  stock_parsent > 5 
+    //         invesemen := int (invesemen_parsent_10 / 5 )
+    //     if  stock_parsent > 10 
+    //         invesemen := int (invesemen_parsent_15 / 5 )
+    //     if  stock_parsent > 15
+    //         invesemen := int (invesemen_parsent_20 / 5 )
+    //     if  stock_parsent > 20
+    //         invesemen := int (invesemen_parsent_25 / 5 )
+    //     if  stock_parsent > 25
+    //         invesemen := int (invesemen_parsent_30 / 5 )
+    //     if  stock_parsent > 30
+    //         invesemen := int (invesemen_parsent_35 / 5 )
+    //     if  stock_parsent > 35
+    //         invesemen := int (invesemen_parsent_40 / 5 )
+    //     if  stock_parsent > 40
+    //         invesemen := int (invesemen_parsent_45 / 5 )
+    //     if  stock_parsent > 45
+    //         invesemen := int (invesemen_parsent_50 / 5 )
+    //     if  stock_parsent > 50
+    //         invesemen := int (invesemen_parsent_50 / 5 )
+    //     if  stock_parsent > 55
+    //         invesemen := int (invesemen_parsent_55 / 5 )
+    //     if  stock_parsent > 60 
+    //         invesemen := int (invesemen_parsent_60 / 5 )
+    //     if  stock_parsent > 65 
+    //         invesemen := int (invesemen_parsent_65 / 5 )
+    //     if  stock_parsent > 70
+    //         invesemen := int (invesemen_parsent_70 / 5 )
+    //     if  stock_parsent > 75
+    //         invesemen := int (invesemen_parsent_75 / 5 )
+    //     if  stock_parsent > 80
+    //         invesemen := int (invesemen_parsent_80 / 5 )
+    //     if  stock_parsent > 85
+    //         invesemen := int (invesemen_parsent_85 / 5 )
+    //     if  stock_parsent > 90
+    //         invesemen := int (invesemen_parsent_90 / 5 )
+    //     if  stock_parsent > 95
+    //         invesemen := int (invesemen_parsent_95 / 5 )
+    //     if  stock_parsent > 100
+    //         invesemen := int (invesemen_parsent_100 / 5 )
+
+
+
+    //     if  Entry_QTT > 0.00
+    //         qtt_add_No_of_Share :=  int (invesemen / close)
+    //     else   
+    //         qtt_add_No_of_Share :=  1
+      
+       
+        
+    //     display_         = 'inve:' + str.tostring((invesemen) , "#.#") +
+    //                      '\n qtt all: ' + str.tostring( math.abs(strategy.position_size) , "#.#") +
+    //                      '\npnl: ' + str.tostring(qtt_add_No_of_Share_TTT, "#.#") +
+    //                      '\n%: ' + str.tostring(stock_parsent, "#.#") + "%"
+        
+    //     add_Entry_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+  Symbol +',BUY,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(qtt_add_No_of_Share)+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+    //     strategy.entry("Buy",  strategy.long, qty=qtt_add_No_of_Share, comment=Algo_DEBUG ? add_Entry_msg: str.tostring(display_), alert_message=add_Entry_msg)
+    //     Entry_QTT := int( qtt_add_No_of_Share)
+
+
+
+// if close <  low_pot  and Quantity_add_low_true and window() //   and  df_sell_false
+//     low_pot := close 
+//     low_true :=  false 
+
+//     // HIGH := close
+//     low_pot := close 
+//     qtt_add_No_of_profit =(HIGH - strategy.position_avg_price ) * (math.abs(strategy.position_size) )
+//     qtt_add_No_of_Share = ( HIGH - strategy.position_avg_price ) * math.abs(strategy.position_size)  >  HIGH ? (HIGH - strategy.position_avg_price)  * math.abs(strategy.position_size) / HIGH : 0
+    
+
+//     qtt_add_No_of_Share_TTT = (HIGH - strategy.position_avg_price) *  (math.abs(strategy.position_size))
+
+    
+//     if qtt_add_No_of_Share >= 1 
+//         qtt_add_No_of_Share :=  ( qtt_add_No_of_Share / 100.00 * Quantity_avre)
+//         add_Entry_msg ='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+  Symbol +',BUY,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(qtt_add_No_of_Share)+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//         strategy.entry("Buy",  strategy.long, qty=qtt_add_No_of_Share, comment=Algo_DEBUG ? add_Entry_msg:"Add_low:" + str.tostring(qtt_add_No_of_Share_TTT,"#") +"\n   qtt:"+ str.tostring(math.abs(strategy.position_size)), alert_message=add_Entry_msg)
+
+
+
+
+// plot( window()  ?  low_pot : na , color=color.new(#b30888, 15) , linewidth=1, title='Profit_target% ',style =plot.style_stepline)
+
+
+
+
+
+
+
+HIGH_caculet_point = (HIGH  / 100.00 * Stoploss_inut)
+HIGH_caculet = HIGH - HIGH_caculet_point
+
+// Stoploss_avrej_p = strategy.position_avg_price - Stoploss_avrej / (math.abs(strategy.position_size) )
+
+// Profit_target_point =  (HIGH  / 100.00 * Profit_target)
+// Profit_target_plot = HIGH   - Profit_target / (math.abs(strategy.position_size) )
+
+
+Stoploss_target = ta.crossunder(close,HIGH_caculet) 
+// Targe_QTT = ( strategy.position_size / 100.00 * T1_Targe) /  100
+
+// // Calculate the stop loss price level based on the entry price
+
+
+// if T1_Targe_Sell and  Targe_cunt == 0   and   not T1_Targe  == 0  and T1_Targe_DEBUG
+    
+
+//     Buy_Close_msg :='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(T1_Targe))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"T1_Targe",qty =T1_Targe , alert_message=Buy_Close_msg)
+//     Targe_cunt := 1
+
+// if T2_Targe_Sell and  Targe_cunt == 1  and   not T2_Targe == 0
+     
+    
+
+//     Buy_Close_msg :='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(T2_Targe))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"T2_Targe", qty=T2_Targe,alert_message=Buy_Close_msg)
+//     Targe_cunt := 2
+// if T3_Targe_Sell and  Targe_cunt == 2   and  not T3_Targe == 0
+    
+
+//     Buy_Close_msg :='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(T3_Targe))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"T3_Targe", qty=T3_Targe, alert_message=Buy_Close_msg)
+//     Targe_cunt := 3
+
+// if T4_Targe_Sell and  Targe_cunt == 3  and  not  T4_Targe == 0
+    
+
+//     Buy_Close_msg :='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(T4_Targe))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"T4_Targe", qty=T4_Targe, alert_message=Buy_Close_msg)
+//     Targe_cunt := 4
+
+// if T5_Targe_Sell and  Targe_cunt == 4  and  not T5_Targe  == 0
+    
+
+//     Buy_Close_msg :='{"Apikey":"'+Apikey_ZERODHA+' ","command": "PLACE_ORDER,'+ user_id +',0,REGULAR,'+ NSE +','+ Symbol +',SELL,MARKET,'+ DELIVERY_INTRADAY +','+str.tostring(math.abs(T5_Targe))+',0,0,0,0,0,0,DAY,FALSE,0,-1,"}'
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"T5_Targe", qty=T5_Targe, alert_message=Buy_Close_msg)
+//     Targe_cunt := 5
+
+
+
+
+// if Stoploss_target  and window()  and    (math.abs(strategy.position_size))> 0
+    
+//     HIGH_false  := false
+//     df_sell_false := false
+  
+
+//     all_chan := chang + all_chan
+//     all_prsen := chang_patse + all_prsen
+
+//     Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+//                          '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+//                          '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+//     Label_baken         ='Stoploss_target:' +
+//                           '\ncapital: ' +  str.tostring(capital,   "#.##") +
+//                          '\nExit: ' +  str.tostring(close,   "#.##") + 
+//                          '\nEnt: ' + str.tostring(ENTRT, "#.##") +
+//                          '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+//                          '\nPnL : ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+//                          '\n %: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+//                          '\nall: ' + str.tostring(all_chan, "#.##")+
+//                          '\nall%: ' + str.tostring(all_prsen, "#.##") + "%" +
+//                          '\nHIGH_profit '+ 
+//                          '\nHIGH: ' + str.tostring(HIGH, "#.##") + "%" +
+//                          '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+
+
+
+
+//     MyLabel(high- (high/5) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2), tooltip = Label_baken)
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Stoploss_target", alert_message=Buy_Close_msg)
+
+
+//  ( strategy.position_size / 100.00 * T1_Targe) /  100
+
+// target__RENJ_FALSE = parsent > target__RENJ
+
+
+
+// Profit_target_parsent_polt = ((HIGH - strategy.position_avg_price) / 100.00 * Profit_target_parsent  + strategy.position_avg_price )
+
+// Profit_target_parsent_polt_TURS = ta.crossunder(close,Profit_target_parsent_polt) 
+
+// if Profit_target_parsent_polt_TURS  and window()    and target__RENJ_FALSE     and  Profit_target_parsent_true   //and Profit_target_parsent_true
+   
+//     HIGH_false  := false
+//     df_sell_false := false
+//     Stoploss_avrej_p := close
+
+//     all_chan := chang + all_chan
+//     all_prsen := chang_patse + all_prsen
+
+//     Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+//                          '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+//                          '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+//     Label_baken         ='SProfit_target_parsent:' +
+//                           '\ncapital: ' +  str.tostring(capital,   "#.##") +
+//                          '\nExit: ' +  str.tostring(close,   "#.##") + 
+//                          '\nEnt: ' + str.tostring(ENTRT, "#.##") +
+//                          '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+//                          '\nPnL : ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+//                          '\n %: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+//                          '\nall: ' + str.tostring(all_chan, "#.##")+
+//                          '\nall%: ' + str.tostring(all_prsen, "#.##") + "%" +
+//                          '\nHIGH_profit= '+ 
+//                          '\nHIGH: ' + str.tostring(HIGH, "#.##") + 
+//                          '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+
+
+//     MyLabel(high- (high/5) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2), tooltip = Label_baken)
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Profit_target_parsent%", alert_message=Buy_Close_msg)
+
+
+
+
+
+
+// Profit_target_plot_TURS = ta.crossunder(close,Profit_target_plot) 
+
+// if Profit_target_plot_TURS  and window()    and target__RENJ_FALSE   and Profit_target_parsent_true
+   
+//     HIGH_false  := false
+//     df_sell_false := false
+//     Stoploss_avrej_p := close
+
+//     all_chan := chang + all_chan
+//     all_prsen := chang_patse + all_prsen
+
+//     Label_Text         = 'chang:' + str.tostring((close - strategy.position_avg_price) , "#.#") +
+//                          '\nPnL: ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.#") +
+//                          '\n%: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.#") + "%"
+//     Label_baken         ='SProfit_target:' +
+//                           '\ncapital: ' +  str.tostring(capital,   "#.##") +
+//                           '\nExit: ' +  str.tostring(close,   "#.##") + 
+//                          '\nEnt: ' + str.tostring(ENTRT, "#.##") +
+//                          '\nchang : ' + str.tostring((close - strategy.position_avg_price) , "#.##") +
+//                          '\nPnL : ' + str.tostring((close - strategy.position_avg_price) * (strategy.position_size) , "#.##") +
+//                          '\n %: ' + str.tostring((close- strategy.position_avg_price) / Entry_fast * 100 , "#.##") + "%" +
+//                          '\nall: ' + str.tostring(all_chan, "#.##")+
+//                          '\nall%: ' + str.tostring(all_prsen, "#.##") + "%" +
+//                          '\nHIGH_profit== '+ 
+//                          '\nHIGH: ' + str.tostring(HIGH, "#.##") + 
+//                          '\nHIGH_profit: ' + str.tostring((HIGH-strategy.position_avg_price) * strategy.position_size, "#.##") 
+
+
+//     MyLabel(high- (high/5) ,     Label_Text , style=label.style_label_upper_right,color = chang > 0 ? color.rgb(16, 246, 13): color.new(#c92510, 7) , size=size.tiny,textcolor=color.rgb(3, 7, 2), tooltip = Label_baken)
+//     strategy.close("Buy", comment=Algo_DEBUG ?Buy_Close_msg:"Profit_target", alert_message=Buy_Close_msg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// target__RENJ_plot =  HIGH    +  (HIGH / 5 )
+         
+
+plot(window() ? ENTRT :na , title="ENTRT", color=color.rgb(16, 246, 13), linewidth=3,style =plot.style_linebr)
+// plot(window() ? Stoploss_caculet : na , title="Stoploss", color=color.rgb(236, 8, 8), linewidth=3,style =plot.style_linebr)
+plot( window() ? strategy.position_avg_price : na, color=   #00059bed , linewidth=2, title='avg_price_p_plot',style =plot.style_stepline)
+plot( window() ?  Stoploss_avrej_p  : na, color=color.new(#c92510, 7) , linewidth=1, title='Stoploss_avrej_plot',style =plot.style_stepline)
+plot( window() ? HIGH : na , color=color.new(#cbcf55, 43) , linewidth=1, title='HIGH_plot ',style =plot.style_stepline)
+plot( window() ? HIGH_caculet : na , color=color.new(#fafafa, 1) , linewidth=1, title='TALIG STOPLOSE ',style =plot.style_stepline)
+// plot( window() and target__RENJ_FALSE   and  Profit_target_parsent_true ? Profit_target_plot : na , color=color.new(#779e0b, 1) , linewidth=1, title='TALIG_target ',style =plot.style_stepline)
+// plot( window() and target__RENJ_FALSE  and  Profit_target_parsent_true ? Profit_target_parsent_polt : na , color=color.new(#089fb3, 15) , linewidth=1, title='Profit_target% ',style =plot.style_stepline )
+plot( window() ? low_pot : na , color=color.new(#0c967f, 1) , linewidth=1, title='low_pot ',style =plot.style_stepline)
+
+
+
+
+
+// plot( window()  and target__RENJ_FALSE ? target__RENJ_plot : na , color=color.new(#5f7a12, 15) , linewidth=1, title='target__RENJ_plot ',style =plot.style_stepline)
+
+
+
+
+
+var testTable = table.new(position = Table_Position , columns = 15, rows = 3, bgcolor = Head_Color, border_width = 1)
+if window()
+    table.cell(table_id = testTable, column = 0, row = 0, text = "Account: " ,     text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 1, row = 0, text = "Risk/Reward" ,   text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 2, row = 0, text = "RiskTrade%" ,    text_color = Text_Color,bgcolor=color.rgb(236, 8, 114),   text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 3, row = 0, text = "Investment",     text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 4, row = 0, text = "Profit",         text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 5, row = 0, text = "Lose",           text_color = Text_Color,bgcolor= color.rgb(236, 8, 114),  text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 6, row = 0, text = "qty",            text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 7, row = 0, text = "T1",             text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 8, row = 0, text = "ENTRT:" ,        text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 9, row = 0, text = "close_ext" ,      text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 10, row = 0, text = "Stoploss" ,      text_color = Text_Color,bgcolor=color.rgb(236, 8, 114),   text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 11, row = 0, text = "  capital  " ,      text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 12, row = 0, text = "pnl" ,          text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 13, row = 0, text = "parsent" ,      text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 14, row = 0, text = "all qtt" ,      text_color = Text_Color,bgcolor=Body_Color,                 text_size=Table_Text_Size ,text_halign = text_halign)
+
+
+
+
+   
+    //  Stoploss_caculet_point_parsent * Risk_Reward
+
+    table.cell(table_id = testTable, column = 0, row = 1, text =  str.tostring(Account_Size),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 1, row = 1, text = str.tostring(Risk_Reward),                     text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+    table.cell(table_id = testTable, column = 2, row = 1, text = str.tostring(Risk_Par_Trade),                     text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 3, row = 1, text = str.tostring(Quantity_ * ENTRT),                  text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 4, row = 1, text = str.tostring((Stoploss_caculet_point * Quantity_) * Risk_Reward ) + ' ('+str.tostring(Stoploss_caculet_point_parsent * Risk_Reward,"#.##") + '%)' ,      text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 5, row = 1, text = str.tostring(Stoploss_caculet_point *Quantity_),  text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 6, row = 1, text = str.tostring(Quantity_),                          text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 7, row = 1, text = str.tostring(0.00),                                 text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 8, row = 1, text =  str.tostring(ENTRT),                            text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 9, row = 1, text = str.tostring(close),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 10, row = 1, text = str.tostring(Stoploss) + ' ('+str.tostring(Stoploss_caculet_point_parsent,"#.##") + '%)' ,                           text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 11, row = 1, text =  str.tostring(capital,"#.##"),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 12, row = 1, text = str.tostring(pnl,"#.##"),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+    table.cell(table_id = testTable, column = 13, row = 1, text =  str.tostring(parsent,"#.##") + '%'  ,        text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+    table.cell(table_id = testTable, column = 14, row = 1, text = str.tostring(all_QTT) ,                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+  
+
+     
+    //  Stoploss_caculet_point_parsent * Risk_Reward    qtt_add_No_of_Share
+// // for i = 0 to (10)
+//     table.cell(table_id = testTable, column = 0, row = 2, text =  str.tostring(Account_Size),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 1, row = 2, text = str.tostring(Risk_Reward),                     text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+//     table.cell(table_id = testTable, column = 2, row = 2, text = str.tostring(Risk_Par_Trade),                     text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 3, row = 2, text = str.tostring(Quantity_ * ENTRT),                  text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 4, row = 2, text = str.tostring((Stoploss_caculet_point * Quantity_) * Risk_Reward ) + ' ('+str.tostring(Stoploss_caculet_point_parsent * Risk_Reward,"#.##") + '%)' ,      text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 5, row = 2, text = str.tostring(Stoploss_caculet_point *Quantity_),  text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 6, row = 2, text = str.tostring(Quantity_),                          text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 7, row = 2, text = str.tostring(T1),                                 text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 8, row = 2, text =  str.tostring(array.get(df_buy_array, 0)),                            text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 9, row = 2, text = str.tostring(array.get(df_sell_array, 0)),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+
+
+//     table.cell(table_id = testTable, column = 10, row = 2, text = str.tostring(Stoploss) + ' ('+str.tostring(Stoploss_caculet_point_parsent,"#.##") + '%)' ,                           text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 11, row = 2, text =  str.tostring(capital),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 12, row = 2, text = str.tostring(pnl,"#.##"),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+//     table.cell(table_id = testTable, column = 13, row = 2, text =  str.tostring(parsent,"#.##") + '%'  ,        text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 14, row = 2, text = str.tostring(df_sell_array),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+
+
+     
+//     //  Stoploss_caculet_point_parsent * Risk_Reward
+// if df_sell_array.size() > 0
+//     table.cell(table_id = testTable, column = 0, row = 3, text =  str.tostring(Account_Size),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 1, row = 3, text = str.tostring(Risk_Reward),                     text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+//     table.cell(table_id = testTable, column = 2, row = 3, text = str.tostring(Risk_Par_Trade),                     text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 3, row = 3, text = str.tostring(Quantity_ * ENTRT),                  text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 4, row = 3, text = str.tostring((Stoploss_caculet_point * Quantity_) * Risk_Reward ) + ' ('+str.tostring(Stoploss_caculet_point_parsent * Risk_Reward,"#.##") + '%)' ,      text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 5, row = 3, text = str.tostring(Stoploss_caculet_point *Quantity_),  text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 6, row = 3, text = str.tostring(Quantity_),                          text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 7, row = 3, text = str.tostring(T1),                                 text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 8, row = 3, text =  str.tostring(1),                            text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 9, row = 3, text = str.tostring(1),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+
+
+//     table.cell(table_id = testTable, column = 10, row = 3, text = str.tostring(Stoploss) + ' ('+str.tostring(Stoploss_caculet_point_parsent,"#.##") + '%)' ,                           text_color = Text_Color, bgcolor=color.rgb(236, 8, 114) ,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 11, row = 3, text =  str.tostring(capital),                      text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 12, row = 3, text = str.tostring(pnl,"#.##"),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+//     table.cell(table_id = testTable, column = 13, row = 3, text =  str.tostring(parsent,"#.##") + '%'  ,        text_color = Text_Color, bgcolor=Body_Color,text_size=Table_Text_Size,text_halign = text_halign)
+//     table.cell(table_id = testTable, column = 14, row = 3, text = str.tostring(df_sell_array),                        text_color = Text_Color, bgcolor=Body_Color ,text_size=Table_Text_Size,text_halign = text_halign)
+    
+
+
